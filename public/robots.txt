@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://petinsuranceguide.app/sitemap.xml

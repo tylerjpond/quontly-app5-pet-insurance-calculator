@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@plugin "daisyui" {
+  themes: calctools;
+}
+
+@plugin "daisyui/theme" {
+  name: "calctools";
+  default: true;
+
+  --color-base-100: #f8fafc;
+  --color-base-200: #f1f5f9;
+  --color-base-300: #e2e8f0;
+  --color-base-content: #1e293b;
+
+  --color-primary: #e11d48;
+  --color-primary-content: #ffffff;
+
+  --color-secondary: #64748b;
+  --color-secondary-content: #ffffff;
+
+  --color-accent: #f59e0b;
+  --color-accent-content: #1c1917;
+
+  --color-neutral: #334155;
+  --color-neutral-content: #f8fafc;
+
+  --color-info: #0ea5e9;
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  --rounded-box: 0.75rem;
+  --rounded-btn: 0.5rem;
+  --tab-radius: 0.5rem;
+}
+
+@layer base {
+  :root {
+    color: #1e293b;
+    background-color: #f8fafc;
+    font-family: 'DM Sans', 'Segoe UI', sans-serif;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    background:
+      radial-gradient(circle at top left, rgba(225, 29, 72, 0.08), transparent 24%),
+      linear-gradient(180deg, #f8fafc 0%, #fef2f2 100%);
+  }
+
+  #root {
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    letter-spacing: -0.02em;
+  }
+}
