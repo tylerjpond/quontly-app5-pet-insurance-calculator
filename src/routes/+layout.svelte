@@ -1,7 +1,7 @@
 <script lang="ts">
   import AppFooter from '$lib/components/AppFooter.svelte'
   import AppHeader from '$lib/components/AppHeader.svelte'
-  import '../app.css'
+  import '../App.css'
 
   const year = new Date().getFullYear()
 </script>
