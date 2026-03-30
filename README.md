@@ -1,73 +1,34 @@
-# React + TypeScript + Vite
+# Pet Insurance Comparison Guide
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a SvelteKit refactor of the Quontly pet insurance calculator. It preserves the existing recommendation logic and supporting content pages while adopting the DaisyUI-based Quontly styling system from the calorie calculator reference app.
 
-Currently, two official plugins are available:
+## Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- SvelteKit
+- Svelte 5
+- TypeScript
+- Tailwind CSS 4
+- DaisyUI 5
+- Zod
 
-## React Compiler
+## Scripts
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- `npm run dev` starts the local development server.
+- `npm run check` runs `svelte-check` with SvelteKit sync.
+- `npm run lint` runs ESLint for TypeScript and config files.
+- `npm run build` creates the prerendered static site in `build/`.
+- `npm run preview` previews the production build locally.
 
-## Expanding the ESLint configuration
+## Structure
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- `src/routes/+page.svelte` contains the main calculator flow.
+- `src/routes/+layout.svelte` provides the shared Quontly shell.
+- `src/routes/about`, `privacy`, `terms`, and `disclosure` contain supporting content pages.
+- `src/lib/petInsurance.ts` contains the recommendation and premium estimation logic.
+- `src/lib/content/site.ts` contains structured copy and legal page content.
+- `src/lib/components/BrandLogo.svelte` matches the reference project branding component.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Notes
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- The previous charting feature was intentionally removed from this migration.
+- The site is configured for static prerendering with `@sveltejs/adapter-static`.

@@ -27,7 +27,7 @@ export const siteMeta = {
   siteName: 'Pet Insurance Comparison Guide',
   adsEnabled: false,
   disclosure:
-    'This site may earn a commission from affiliate links on this page. That compensation does not change recommendation scoring or ranking logic.',
+    'This site may earn a commission from affiliate links on this page. That compensation does not change recommendation scoring or ranking logic. Availability and quote details vary by country and region.',
 }
 
 export const affiliateCards: AffiliateCardContent[] = [
@@ -109,7 +109,7 @@ export const explainerSections: ContentSection[] = [
     title: 'Complete the pet profile quiz, then compare ranked plans',
     paragraphs: [
       'This pet insurance comparison guide works best when you complete all profile steps: pet type, breed, age, location, priorities, and pre-existing condition status. Those inputs determine how each plan is weighted in the ranking engine.',
-      'After submitting, review the top recommendations, compare deductible and reimbursement ranges, and use the cost estimator slider to test how monthly estimates change with age assumptions.',
+      'After submitting, review the top recommendations, compare deductible and reimbursement ranges, and request live quotes from the most relevant providers in your country and region.',
     ],
   },
   {
@@ -118,13 +118,14 @@ export const explainerSections: ContentSection[] = [
     paragraphs: [
       'Each provider receives a weighted composite score across affordability, coverage depth, and reputation profile. Your selected priorities raise the weight of matching factors while still preserving baseline balance across all three categories.',
       'Premium estimates combine pet profile risk factors with provider pricing indices. Rankings are deterministic for the same inputs so you can compare options consistently.',
+      'The current release supports United States states and Canada provinces/territories. Additional countries may be added in future updates.',
     ],
   },
   {
     eyebrow: 'What to know',
     title: 'Use estimates as planning guidance, then confirm live quotes',
     paragraphs: [
-      'Any pet insurance calculator is an estimate, not a bindable quote. Final premiums and eligibility depend on carrier underwriting, state rules, and plan details available at checkout.',
+      'Any pet insurance calculator is an estimate, not a bindable quote. Final premiums and eligibility depend on carrier underwriting, local rules, and plan details available at checkout.',
       'A practical workflow is to shortlist two to three top-ranked providers, request real quotes, and compare exclusions, waiting periods, and annual caps before purchasing.',
     ],
   },
@@ -163,7 +164,7 @@ export const legalPageCopy: Record<string, LegalPageContent> = {
         heading: 'Methodology',
         paragraphs: [
           'The tool uses a deterministic scoring model with weighted factors for price, coverage, and reputation. User-selected priorities raise the influence of matching factors while preserving baseline balance.',
-          'Monthly premium estimates apply pet type, size class, age, and risk adjustments along with state and provider multipliers. This produces planning estimates, not binding quotes.',
+          'Monthly premium estimates apply pet type, size class, age, and risk adjustments along with country, region, and provider multipliers. This produces planning estimates, not binding quotes.',
         ],
       },
       {

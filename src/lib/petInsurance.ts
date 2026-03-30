@@ -1,6 +1,7 @@
 export type PetType = 'dog' | 'cat' | 'other'
 export type SizeClass = 'toy' | 'medium' | 'large' | 'giant'
 export type Priority = 'price' | 'coverage' | 'reputation'
+export type CountryCode = 'US' | 'CA'
 
 export interface BreedProfile {
   name: string
@@ -13,15 +14,22 @@ export interface QuizInputs {
   petType: PetType
   breed: string
   age: number
-  state: string
+  country: CountryCode
+  region: string
   priorities: Priority[]
   hasPreExistingCondition: boolean
+}
+
+export interface RegionOption {
+  code: string
+  label: string
 }
 
 export interface ProviderPlan {
   key: string
   name: string
   affiliateUrl: string
+  countries: CountryCode[]
   priceIndex: number
   coverageScore: number
   reputationScore: number
@@ -40,6 +48,16 @@ export interface Recommendation {
   }
 }
 
+export const defaultQuizInputs: QuizInputs = {
+  petType: 'dog',
+  breed: 'Labrador Retriever',
+  age: 3,
+  country: 'US',
+  region: 'CA',
+  priorities: ['coverage'],
+  hasPreExistingCondition: false,
+}
+
 const sizeMultipliers: Record<SizeClass, number> = {
   toy: 0.85,
   medium: 1,
@@ -47,14 +65,31 @@ const sizeMultipliers: Record<SizeClass, number> = {
   giant: 1.5,
 }
 
-const stateMultipliers: Record<string, number> = {
-  AL: 0.92, AK: 1.18, AZ: 0.98, AR: 0.9, CA: 1.25, CO: 1.02, CT: 1.12, DE: 1.03,
-  FL: 1.16, GA: 1.02, HI: 1.2, ID: 0.9, IL: 1.08, IN: 0.95, IA: 0.92, KS: 0.9,
-  KY: 0.92, LA: 0.98, ME: 0.95, MD: 1.06, MA: 1.14, MI: 1.02, MN: 1.01, MS: 0.88,
-  MO: 0.94, MT: 0.9, NE: 0.9, NV: 1.03, NH: 1.02, NJ: 1.15, NM: 0.93, NY: 1.2,
-  NC: 1.01, ND: 0.87, OH: 0.97, OK: 0.9, OR: 1.04, PA: 1.02, RI: 1.1, SC: 0.98,
-  SD: 0.87, TN: 0.95, TX: 1.05, UT: 0.94, VT: 0.95, VA: 1.02, WA: 1.08, WV: 0.9,
-  WI: 0.95, WY: 0.88,
+const regionMultipliers: Record<CountryCode, Record<string, number>> = {
+  US: {
+    AL: 0.92, AK: 1.18, AZ: 0.98, AR: 0.9, CA: 1.25, CO: 1.02, CT: 1.12, DE: 1.03,
+    FL: 1.16, GA: 1.02, HI: 1.2, ID: 0.9, IL: 1.08, IN: 0.95, IA: 0.92, KS: 0.9,
+    KY: 0.92, LA: 0.98, ME: 0.95, MD: 1.06, MA: 1.14, MI: 1.02, MN: 1.01, MS: 0.88,
+    MO: 0.94, MT: 0.9, NE: 0.9, NV: 1.03, NH: 1.02, NJ: 1.15, NM: 0.93, NY: 1.2,
+    NC: 1.01, ND: 0.87, OH: 0.97, OK: 0.9, OR: 1.04, PA: 1.02, RI: 1.1, SC: 0.98,
+    SD: 0.87, TN: 0.95, TX: 1.05, UT: 0.94, VT: 0.95, VA: 1.02, WA: 1.08, WV: 0.9,
+    WI: 0.95, WY: 0.88,
+  },
+  CA: {
+    AB: 0.98,
+    BC: 1.12,
+    MB: 0.93,
+    NB: 0.96,
+    NL: 0.98,
+    NS: 1,
+    NT: 1.08,
+    NU: 1.11,
+    ON: 1.09,
+    PE: 0.95,
+    QC: 1.03,
+    SK: 0.94,
+    YT: 1.05,
+  },
 }
 
 const dogBreeds: BreedProfile[] = [
@@ -152,18 +187,102 @@ const catBreeds: BreedProfile[] = [
 
 export const breeds: BreedProfile[] = [...dogBreeds, ...catBreeds]
 
-export const usStates = [
-  'AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS',
-  'KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY',
-  'NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV',
-  'WI','WY',
+export const countries: Array<{ code: CountryCode; label: string }> = [
+  { code: 'US', label: 'United States' },
+  { code: 'CA', label: 'Canada' },
 ]
+
+export const regionsByCountry: Record<CountryCode, RegionOption[]> = {
+  US: [
+    { code: 'AL', label: 'Alabama' },
+    { code: 'AK', label: 'Alaska' },
+    { code: 'AZ', label: 'Arizona' },
+    { code: 'AR', label: 'Arkansas' },
+    { code: 'CA', label: 'California' },
+    { code: 'CO', label: 'Colorado' },
+    { code: 'CT', label: 'Connecticut' },
+    { code: 'DE', label: 'Delaware' },
+    { code: 'FL', label: 'Florida' },
+    { code: 'GA', label: 'Georgia' },
+    { code: 'HI', label: 'Hawaii' },
+    { code: 'ID', label: 'Idaho' },
+    { code: 'IL', label: 'Illinois' },
+    { code: 'IN', label: 'Indiana' },
+    { code: 'IA', label: 'Iowa' },
+    { code: 'KS', label: 'Kansas' },
+    { code: 'KY', label: 'Kentucky' },
+    { code: 'LA', label: 'Louisiana' },
+    { code: 'ME', label: 'Maine' },
+    { code: 'MD', label: 'Maryland' },
+    { code: 'MA', label: 'Massachusetts' },
+    { code: 'MI', label: 'Michigan' },
+    { code: 'MN', label: 'Minnesota' },
+    { code: 'MS', label: 'Mississippi' },
+    { code: 'MO', label: 'Missouri' },
+    { code: 'MT', label: 'Montana' },
+    { code: 'NE', label: 'Nebraska' },
+    { code: 'NV', label: 'Nevada' },
+    { code: 'NH', label: 'New Hampshire' },
+    { code: 'NJ', label: 'New Jersey' },
+    { code: 'NM', label: 'New Mexico' },
+    { code: 'NY', label: 'New York' },
+    { code: 'NC', label: 'North Carolina' },
+    { code: 'ND', label: 'North Dakota' },
+    { code: 'OH', label: 'Ohio' },
+    { code: 'OK', label: 'Oklahoma' },
+    { code: 'OR', label: 'Oregon' },
+    { code: 'PA', label: 'Pennsylvania' },
+    { code: 'RI', label: 'Rhode Island' },
+    { code: 'SC', label: 'South Carolina' },
+    { code: 'SD', label: 'South Dakota' },
+    { code: 'TN', label: 'Tennessee' },
+    { code: 'TX', label: 'Texas' },
+    { code: 'UT', label: 'Utah' },
+    { code: 'VT', label: 'Vermont' },
+    { code: 'VA', label: 'Virginia' },
+    { code: 'WA', label: 'Washington' },
+    { code: 'WV', label: 'West Virginia' },
+    { code: 'WI', label: 'Wisconsin' },
+    { code: 'WY', label: 'Wyoming' },
+  ],
+  CA: [
+    { code: 'AB', label: 'Alberta' },
+    { code: 'BC', label: 'British Columbia' },
+    { code: 'MB', label: 'Manitoba' },
+    { code: 'NB', label: 'New Brunswick' },
+    { code: 'NL', label: 'Newfoundland and Labrador' },
+    { code: 'NS', label: 'Nova Scotia' },
+    { code: 'NT', label: 'Northwest Territories' },
+    { code: 'NU', label: 'Nunavut' },
+    { code: 'ON', label: 'Ontario' },
+    { code: 'PE', label: 'Prince Edward Island' },
+    { code: 'QC', label: 'Quebec' },
+    { code: 'SK', label: 'Saskatchewan' },
+    { code: 'YT', label: 'Yukon' },
+  ],
+}
+
+export const defaultRegionByCountry: Record<CountryCode, string> = {
+  US: 'CA',
+  CA: 'ON',
+}
+
+const currencyByCountry: Record<CountryCode, 'USD' | 'CAD'> = {
+  US: 'USD',
+  CA: 'CAD',
+}
+
+const countryBaseMultipliers: Record<CountryCode, number> = {
+  US: 1,
+  CA: 0.97,
+}
 
 export const providerPlans: ProviderPlan[] = [
   {
     key: 'pets-best',
     name: 'Pets Best',
     affiliateUrl: 'https://www.petsbest.com/',
+    countries: ['US'],
     priceIndex: 1,
     coverageScore: 90,
     reputationScore: 84,
@@ -175,6 +294,7 @@ export const providerPlans: ProviderPlan[] = [
     key: 'lemonade',
     name: 'Lemonade Pet',
     affiliateUrl: 'https://www.lemonade.com/pet/',
+    countries: ['US'],
     priceIndex: 0.9,
     coverageScore: 78,
     reputationScore: 80,
@@ -186,6 +306,7 @@ export const providerPlans: ProviderPlan[] = [
     key: 'healthy-paws',
     name: 'Healthy Paws',
     affiliateUrl: 'https://www.healthypawspetinsurance.com/',
+    countries: ['US'],
     priceIndex: 1.06,
     coverageScore: 86,
     reputationScore: 91,
@@ -197,6 +318,7 @@ export const providerPlans: ProviderPlan[] = [
     key: 'aspca',
     name: 'ASPCA Pet Insurance',
     affiliateUrl: 'https://www.aspcapetinsurance.com/',
+    countries: ['US'],
     priceIndex: 1.02,
     coverageScore: 82,
     reputationScore: 83,
@@ -208,12 +330,73 @@ export const providerPlans: ProviderPlan[] = [
     key: 'embrace',
     name: 'Embrace Pet Insurance',
     affiliateUrl: 'https://www.embracepetinsurance.com/',
+    countries: ['US'],
     priceIndex: 1.08,
     coverageScore: 89,
     reputationScore: 87,
     deductibleOptions: '$100 to $1,000',
     reimbursementOptions: '70%, 80%, 90%',
     highlights: ['Comprehensive coverage profile', 'Strong customization fit', 'High score on coverage weight'],
+  },
+  {
+    key: 'trupanion-ca',
+    name: 'Trupanion Canada',
+    affiliateUrl: 'https://trupanion.com/en-ca/pet-insurance',
+    countries: ['CA'],
+    priceIndex: 1.14,
+    coverageScore: 91,
+    reputationScore: 88,
+    deductibleOptions: 'C$0 to C$1,000',
+    reimbursementOptions: '90%',
+    highlights: ['Direct-pay support at many clinics', 'Coverage-first fit', 'Strong reimbursement profile'],
+  },
+  {
+    key: 'petsecure',
+    name: 'Petsecure',
+    affiliateUrl: 'https://www.petsecure.com/',
+    countries: ['CA'],
+    priceIndex: 1.01,
+    coverageScore: 83,
+    reputationScore: 82,
+    deductibleOptions: 'C$100 to C$500',
+    reimbursementOptions: '80%',
+    highlights: ['Canada-focused carrier', 'Balanced plan design', 'Good baseline quote candidate'],
+  },
+  {
+    key: 'petsplusus',
+    name: 'Pets Plus Us',
+    affiliateUrl: 'https://www.petsplusus.com/',
+    countries: ['CA'],
+    priceIndex: 0.97,
+    coverageScore: 81,
+    reputationScore: 84,
+    deductibleOptions: 'C$100 to C$700',
+    reimbursementOptions: '70%, 80%, 90%',
+    highlights: ['Strong value profile', 'Flexible annual and deductible options', 'Common multi-pet consideration'],
+  },
+  {
+    key: 'fetch-ca',
+    name: 'Fetch Canada',
+    affiliateUrl: 'https://www.fetchpet.ca/',
+    countries: ['CA'],
+    priceIndex: 1.06,
+    coverageScore: 87,
+    reputationScore: 86,
+    deductibleOptions: 'C$250 to C$1,000',
+    reimbursementOptions: '70%, 80%, 90%',
+    highlights: ['Broad coverage positioning', 'Strong reputation trend', 'Useful for higher-coverage priorities'],
+  },
+  {
+    key: 'sonnet-pet',
+    name: 'Sonnet Pet Insurance',
+    affiliateUrl: 'https://www.sonnet.ca/pet-insurance',
+    countries: ['CA'],
+    priceIndex: 0.94,
+    coverageScore: 76,
+    reputationScore: 79,
+    deductibleOptions: 'C$250 to C$1,000',
+    reimbursementOptions: '80%, 90%',
+    highlights: ['Budget-oriented option', 'Fast online quote path', 'Useful for affordability-first comparisons'],
   },
 ]
 
@@ -254,6 +437,18 @@ export function findBreedByName(name: string) {
   return breeds.find((breed) => breed.name === name)
 }
 
+export function isValidRegion(country: CountryCode, region: string) {
+  return regionsByCountry[country].some((option) => option.code === region)
+}
+
+export function getRegionLabel(country: CountryCode, region: string) {
+  return regionsByCountry[country].find((option) => option.code === region)?.label ?? region
+}
+
+export function getCurrencyForCountry(country: CountryCode) {
+  return currencyByCountry[country]
+}
+
 export function estimateMonthlyPremium(inputs: QuizInputs) {
   const breed = findBreedByName(inputs.breed)
   const sizeClass = breed?.sizeClass ?? 'medium'
@@ -262,12 +457,13 @@ export function estimateMonthlyPremium(inputs: QuizInputs) {
   const typeBase = inputs.petType === 'dog' ? 52 : inputs.petType === 'cat' ? 34 : 28
   const ageMultiplier = 1 + Math.max(inputs.age - 1, 0) * 0.05
   const riskMultiplier = 1 + (riskScore - 3) * 0.08
-  const stateMultiplier = stateMultipliers[inputs.state] ?? 1
+  const regionMultiplier = regionMultipliers[inputs.country][inputs.region] ?? 1
+  const countryMultiplier = countryBaseMultipliers[inputs.country]
   const preExistingMultiplier = inputs.hasPreExistingCondition ? 1.15 : 1
 
   const base = typeBase
   const adjusted =
-    base * sizeMultipliers[sizeClass] * ageMultiplier * riskMultiplier * stateMultiplier * preExistingMultiplier
+    base * sizeMultipliers[sizeClass] * ageMultiplier * riskMultiplier * regionMultiplier * countryMultiplier * preExistingMultiplier
 
   return {
     base,
@@ -278,8 +474,9 @@ export function estimateMonthlyPremium(inputs: QuizInputs) {
 export function getRecommendations(inputs: QuizInputs): Recommendation[] {
   const estimate = estimateMonthlyPremium(inputs)
   const weights = getPriorityWeights(inputs.priorities)
+  const providersForCountry = providerPlans.filter((provider) => provider.countries.includes(inputs.country))
 
-  const scored = providerPlans.map((provider) => {
+  const scored = providersForCountry.map((provider) => {
     const premium = Number((estimate.adjusted * provider.priceIndex).toFixed(2))
     const normalizedPriceScore = clamp(100 - ((premium - 20) / 380) * 100, 0, 100)
     const priceScore = normalizedPriceScore
