@@ -10,14 +10,27 @@ This project is a SvelteKit refactor of the Quontly pet insurance calculator. It
 - Tailwind CSS 4
 - DaisyUI 5
 - Zod
+- Cloudflare Pages (via `@sveltejs/adapter-cloudflare`)
 
 ## Scripts
 
 - `npm run dev` starts the local development server.
 - `npm run check` runs `svelte-check` with SvelteKit sync.
 - `npm run lint` runs ESLint for TypeScript and config files.
-- `npm run build` creates the prerendered static site in `build/`.
-- `npm run preview` previews the production build locally.
+- `npm run build` runs `vite build` and generates Cloudflare Pages output in `.svelte-kit/cloudflare`.
+- `npm run preview` runs the built app locally using Wrangler Pages.
+- `npm run deploy` deploys the built app to Cloudflare Pages.
+
+## Cloudflare Pages Deployment
+
+1. Build the project:
+	- `npm run build`
+2. Deploy with Wrangler:
+	- `npm run deploy -- --project-name <your-cloudflare-pages-project>`
+
+Notes:
+- `wrangler.toml` is configured to use `.svelte-kit/cloudflare` as the Pages output directory.
+- The app currently prerenders routes (`src/routes/+layout.ts`) and remains static-first, now packaged for Cloudflare Pages deployment.
 
 ## Structure
 
@@ -31,4 +44,4 @@ This project is a SvelteKit refactor of the Quontly pet insurance calculator. It
 ## Notes
 
 - The previous charting feature was intentionally removed from this migration.
-- The site is configured for static prerendering with `@sveltejs/adapter-static`.
+- The site is configured for Cloudflare Pages deployment with `@sveltejs/adapter-cloudflare`.
